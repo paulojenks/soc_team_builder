@@ -11,16 +11,9 @@
 
 -As a user of the site, I should be able to approve an applicant for a position in my project.
 -As a user of the site, I should be able to reject an applicant for a position in my project.
-As a user of the site, I should get a notification if I've been rejected or approved for a position.
+-As a user of the site, I should get a notification if I've been rejected or approved for a position.
 
 -As a user of the site, I should be able to search for projects based on words in their titles or descriptions.
 -As a user of the site, I should be able to filter projects by the positions they need filled.
 -As a user of the site, I should be able to apply for a position in a project.
 -As a user of the site, I should be able to log out.
-
-
-testy@gmail.org
-ITcrowd1
-
-testy@testuser.com
-ITcrowd1

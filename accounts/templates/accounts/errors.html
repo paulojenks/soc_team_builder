@@ -1,0 +1,8 @@
+{% extends 'accounts/layout.html' %}
+
+
+<h1>You've already applied for this position!</h1>
+{% block content %}
+    <h1>You've already applied for this position!</h1>
+    <a href="{% url 'accounts:applications' %}">Back to Applications</a>
+{% endblock %}

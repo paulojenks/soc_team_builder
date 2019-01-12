@@ -1,0 +1,15 @@
+{% extends "accounts/layout.html" %}
+
+  {% block content %}
+<div class="bounds circle--page circle--article">
+    <div class="grid-70">
+    <form action="" method="POST">
+        {{ project_formset }}
+        {{ position_form }}
+        {% csrf_token %}
+        <button class="button button-primary" type="submit">Submit</button>>
+        <a class="button button-cancel" href="{% url "accounts:index" %}">Cancel</a>
+    </form>
+    </div>
+</div>
+{% endblock %}

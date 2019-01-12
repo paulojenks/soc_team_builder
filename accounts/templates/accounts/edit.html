@@ -1,0 +1,29 @@
+{% extends 'accounts/layout.html'%}
+
+{% block content %}
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ formset.management_form }}
+    <input type=submit class="button-primary" value="Submit">
+    {% for form in formset %}
+        <div class="grid-70">
+            {{ form.id }}
+            {{ form.first_name }}
+            {{ form.last_name }}
+            <div class="circle--article--body">
+                {{ form.bio }}
+            </div>
+
+        </div>
+        <div class="grid-25 grid-push-5">
+            <div class="circle--secondary--module">
+                <div class="circle--primary--avatar">
+                    <img src="{{ user.profile.avatar.url }}" height="200">
+                        {{ form.avatar }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</form>
+{% endblock %}

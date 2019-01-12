@@ -1,0 +1,74 @@
+{% extends 'accounts/layout.html' %}
+
+{% block content %}
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+    {% if project_form.errors %}
+    {% for field in project_form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in project_form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+  <div class="circle--actions--bar">
+    <div class="bounds">
+      <div class="grid-100">
+
+        <input type="submit" class="button button-primary" value="Submit">
+
+      </div>
+    </div>
+  </div>
+
+  <div class="bounds circle--page circle--article">
+    <div class="grid-70">
+      <div class="circle--article--body">
+          <h2>{{ project_form.title.label }}</h2>
+            {{ project_form.title }}
+        <h3>{{ project_form.description.label }}</h3>
+            {{ project_form.description }}
+
+      </div>
+
+      <div class="circle--project--positions">
+        <h2>Positions</h2>
+        <ul class="circle--group--list circle--clone--list">
+        {% if pos.count > 0 %}
+            {% for p in pos %}
+                <p>{{ p.name }}
+                <a href="{% url 'accounts:position_delete' p.id %}">delete</a></p>
+            {% endfor %}
+        {% endif %}
+            <h3>Add Positions</h3>
+            {{ position_form.management_form }}
+            {{ position_form }}
+         </ul>
+      </div>
+    </div>
+
+    <div class="grid-25 grid-push-5">
+      <div class="circle--secondary--module">
+        <h3>Project Needs</h3>
+          {{ project_form.skill_needs }}
+      </div>
+
+      <div class="circle--secondary--module">
+        <h3>Project Timeline</h3>
+          {{ project_form.timeline }}
+      </div>
+
+      <div class="circle--secondary--module">
+        <h3>Applicant Requirements</h3>
+        {{ project_form.requirements }}
+      </div>
+    </div>
+  </div>
+    </form>
+{% endblock %}

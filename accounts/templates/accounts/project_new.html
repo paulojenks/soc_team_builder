@@ -1,0 +1,67 @@
+{% extends 'accounts/layout.html' %}
+
+{% block content %}
+    {{ project_formset.management_form }}
+    {% for project in project_formset %}
+    <form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+{#        {{ project.auto_id }}#}
+  <div class="circle--actions--bar">
+    <div class="bounds">
+      <div class="grid-100">
+        <input type="submit" class="button button-primary" value="Submit">
+        <a class="button button-text" href="projects/index.html">Discard</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bounds circle--page circle--article">
+    <div class="grid-70">
+      <div class="circle--article--body">
+          <h2>{{ project.title.label }}</h2>
+                {{ project.title }}
+            <h3>{{ project.description.label }}</h3>
+                {{ project.description }}
+      </div>
+      <div class="circle--project--positions">
+          <form method="POST" action="" name="position_form" enctype="multipart/form-data">
+        <h2>Add Positions</h2>
+            <ul class="circle--group--list circle--clone--list">
+            {{ position_form.management_form }}
+                {% for position in position_form %}
+            <li>
+                {{ position.name }}
+                {{ position.descript }}
+                {{ position.skill }}
+                <a class="circle--clone--add">Add Position</a>
+                <a class="circle--clone--remove">Remove</a>
+            </li>
+            {% endfor %}
+        </ul>
+          </form>
+{#        <input type="submit" class="button button-primary" name="position_form" value="Save">#}
+
+      </div>
+    </div>
+
+    <div class="grid-25 grid-push-5">
+      <div class="circle--secondary--module">
+        <h3>Project Needs</h3>
+          {{ project.skill_needs }}
+      </div>
+
+      <div class="circle--secondary--module">
+        <h3>Project Timeline</h3>
+          {{ project.timeline }}
+      </div>
+
+      <div class="circle--secondary--module">
+        <h3>Applicant Requirements</h3>
+        {{ project.requirements }}
+      </div>
+
+    </div>
+  </div>
+    {% endfor %}
+    </form>
+{% endblock %}

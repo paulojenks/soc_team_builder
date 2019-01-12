@@ -1,0 +1,120 @@
+{% extends 'accounts/layout.html' %}
+<script>
+    $('.skill-formset').formset({
+        addText: 'add link',
+        deleteText: 'remove'
+    });
+</script>
+
+{% block content %}
+    <form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ profile_formset.management_form }}
+    {{ project_formset.management_form }}
+    {% for form in profile_formset %}
+        {{ form.id }}
+  <div class="circle--actions--bar">
+    <nav class="bounds">
+      <ul class="circle--pill--list">
+{#        <li><a href="applications.html">Applications</a></li>#}
+        <li><a class="selected" href="{% url 'accounts:profile' %}">Profile</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="bounds circle--page">
+    <div class="circle--page--header circle--fluid">
+      <div class="circle--fluid--cell circle--fluid--primary">
+        <h2>Profile</h2>
+      </div>
+      <div class="circle--fluid--cell circle--fluid--secondary">
+          <div class="grid-30">
+          <div class="btn-group btn-group-xs">
+              <button type="submit" class="btn button-primary" value="Submit">Submit</button>
+          <button class="btn button-secondary"  href="{% url 'accounts:profile' %}">Cancel</button>
+          </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="grid-70">
+            {{ form.first_name.label }}
+            {{ form.first_name }}
+            {{ form.last_name.label }}
+            {{ form.last_name }}
+      <div class="circle--article--body">
+          {{ form.bio }}</div>
+      <h2>Past Projects</h2>
+      <table class="u-full-width circle--table">
+        <thead>
+          <tr>
+            <th>Project Title</th>
+              {% for project in projects %}
+            <th class="circle--cell--right">Project Needs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="clickable-row" data-href="project.html">
+            <td>
+              <h3>{{ project }}</h3>
+            </td>
+            <td class="circle--cell--right">
+              <span class="secondary-label"></span>
+            </td>
+          </tr>
+        </tbody>
+                  {% endfor %}
+      </table>
+
+    </div>
+
+    <div class="grid-25 grid-push-5">
+
+      <div class="circle--secondary--module">
+        <div class="circle--primary--avatar">
+            <img src="{{ user.profile.avatar.url }}" height="200">
+            {{ form.avatar }}
+        </div>
+      </div>
+
+      <div class="circle--secondary--module">
+        <h4>My Skills</h4>
+        <ul class="circle--clone--list">
+        {% for skill in skills %}
+            <li>{{ skill }}
+            <a href="{% url 'accounts:skill_delete' skill.id %}">delete</a></li>
+            {% endfor %}
+        <h4>Add Skills</h4>
+            {{ skill_formset.management_form }}
+            {% for skill_form in skill_formset %}
+                {{ skill_form.id }}
+                <li>
+                    {{ skill_form.name }}
+                    {{ skill_form.DELETE }}
+                {{ skill_form.ERRORS }}
+                </li>
+            {% endfor %}
+        </ul>
+      </div>
+
+      <div class="circle--secondary--module">
+        <h4>My Projects</h4>
+        <ul class="circle--clone--list">
+        {% for project_form in project_formset %}
+          <li>
+            {{ project_form.id }}
+              {{ project_form.title }}
+              {{ project_form.url }}
+            <a class="circle--clone--add">Add Project</a>
+            <a class="circle--clone--remove">Remove</a>
+          </li>
+        {% endfor %}
+        </ul>
+
+      </div>
+    </div>
+
+  </div>
+    {% endfor %}
+    </form>
+{% endblock %}

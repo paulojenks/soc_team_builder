@@ -1,0 +1,20 @@
+{% extends "accounts/layout.html" %}
+
+  {% block content %}
+<div class="bounds circle--page circle--article">
+    <div class="grid-70">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <h3>Are you Positive you want to delete {{ project }}?</h3>
+        <p><i>This cannot be undone and you worked so hard!</i></p>
+        <div class="grid-30">
+            <button class="button button-primary" type="submit">Yup!</button>
+        </div>
+        <div class="grid-30"></div>
+        <div class="grid-30">
+            <a class="button button-secondary" href="{% url 'accounts:profile' %}">No Way!</a>
+        </div>
+    </form>
+    </div>
+</div>
+{% endblock %}

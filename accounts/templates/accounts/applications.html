@@ -1,0 +1,97 @@
+{% extends 'accounts/layout.html' %}
+{% block content %}
+
+  <div class="circle--actions--bar">
+    <nav class="bounds">
+      <ul class="circle--pill--list">
+        <li><a class="selected" href="{% url 'accounts:applications' %}">Applications</a></li>
+        <li><a href="{% url 'accounts:profile' %}">Profile</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="bounds circle--page">
+    <div class="circle--page--header grid-100">
+      <h2>Applications</h2>
+    </div>
+
+    <div class="grid-25">
+      <div class="circle--filter circle--secondary--module">
+        <h4>Status</h4>
+      {% if applications.count == 0 %}
+      <p><i>No Applications, yet</i></p>
+      {% endif %}
+        <ul class="circle--filter--list">
+          <li><a class="selected">All Applications</a></li>
+            <li><a>New Applications</a></li>
+            {% for application in applications %}
+                {% if application.status == 'undecided' %}
+                    <li>{{ application.position }}</li>
+                {% endif %}
+            {% endfor %}
+          <li><a>Accepted</a></li>
+            {% for application in applications %}
+                {% if application.status == 'approved' %}
+                    <li>{{ application.position }}</li>
+                {% endif %}
+            {% endfor %}
+          <li><a>Rejected</a></li>
+            {% for application in applications %}
+                {% if application.status == 'denied' %}
+                    <li>{{ application.position }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+      </div>
+
+      <div class="circle--filter circle--secondary--module">
+        <h4>My Projects</h4>
+        <ul class="circle--filter--list">
+          <li><a class="selected">All Projects</a></li>
+            {% for project in projects %}
+          <li><a href="{% url "accounts:project" project.id %}">{{ project.title }}</a></li>
+        {% endfor %}
+        </ul>
+      </div>
+
+      <div class="circle--filter circle--secondary--module">
+        <h4>Project Needs</h4>
+        <ul class="circle--filter--list">
+          <li><a class="selected" href="{% url 'accounts:index' %}">All Needs</a></li>
+            {% for skill in skills %}
+          <li><a href="{% url 'accounts:sort' skillz=skill %}">{{ skill }}</a></li>
+            {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="grid-70 grid-push-5">
+      <table class="u-full-width circle--table">
+        <thead>
+          <tr>
+            <th>Applicant</th>
+            <th class="circle--cell--right">Applicant Position</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% if applications.count == 0 %}
+        <tr><td>No Applicants, yet!</td></tr>
+        {% endif %}
+        {% for application in applications %}
+          <tr class="clickable-row" data-href="{% url 'accounts:application_detail' pk=application.id %}">
+            <td>
+              <h3>{{ application.user.first_name }} {{ application.user.last_name }}</h3>
+              <p>{{ application.position.project }}</p>
+            </td>
+            <td class="circle--cell--right">
+              <span class="secondary-label">{{ application.position }}</span>
+                <p>{{ application.status }}    <a href="{% url 'accounts:application_delete' application.id %}">delete</a></p>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

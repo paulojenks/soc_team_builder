@@ -1,0 +1,17 @@
+{% extends "accounts/layout.html" %}
+
+  {% block content %}
+<div class="bounds circle--page circle--article">
+    <div class="grid-70">
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <h3>You are applying for the position of {{ position.name }} for {{ position.project }}</h3>
+        <p>{{ position.descript }}</p>
+        <p>I agree to submit my profile as my application {{ application.submit }}</p>
+        <div class="grid-30"><button class="button button-primary" type="submit">Submit</button></div>
+        <a class="button button-cancel" href="{% url "accounts:index" %}">Cancel</a>
+    </form>
+    </div>
+</div>
+{% endblock %}

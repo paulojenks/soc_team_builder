@@ -11,7 +11,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=100, blank=True)
     email = models.EmailField(validators=[EmailValidator])
     bio = models.TextField(blank=True, validators=[MinLengthValidator(10)])
-    avatar = models.ImageField(upload_to="avatars", default="avatars/avatar-159236_1280.png")
+    avatar = models.ImageField(upload_to="avatars", default="avatars/default_avatar.png")
 
 
 def create_profile(sender,**kwargs ):

@@ -6,8 +6,8 @@
   <div class="circle--actions--bar">
     <nav class="bounds">
       <ul class="circle--pill--list">
-        <li><a href="{% url 'accounts:applications' %}">Applications</a></li>
-        <li><a class="selected" href="{% url 'accounts:profile' %}">Profile</a></li>
+        <li><a class="selected" href="{% url 'accounts:applications' %}">Applications</a></li>
+        <li><a href="{% url 'accounts:profile' %}">Profile</a></li>
       </ul>
     </nav>
   </div>
@@ -15,23 +15,9 @@
   <div class="bounds circle--page">
     <div class="circle--page--header circle--fluid">
       <div class="circle--fluid--cell circle--fluid--primary">
-        <h2>Profile</h2>
-      </div>
-      <div class="circle--fluid--cell circle--fluid--secondary">
-        <a class="button icon-on-left" href="{% url 'accounts:edit_profile' %}">Edit</a>
+        <h2>Applicant Profile</h2>
       </div>
     </div>
-        <form action="" method="POST">
-        {% csrf_token %}
-        <div class="grid-30">
-            {{ application }}
-            <button class="button button-primary" type="submit">Submit</button>
-        </div>
-        <div class="grid-30"></div>
-        <div class="grid-30">
-            <a class="button button-secondary" href="{% url 'accounts:applications' %}">Cancel</a>
-        </div>
-    </form>
     <div class="grid-70">
       <h1>{{ profile.first_name|title }} {{ profile.last_name|title }}</h1>
       <div class="circle--article--body">
@@ -66,6 +52,12 @@
 
     <div class="grid-25 grid-push-5">
       <div class="circle--secondary--module">
+              <form action="" method="POST">
+        {% csrf_token %}
+            {{ application }}
+            <button class="button button-primary" type="submit">Submit</button>
+            <a class="button button-secondary" href="{% url 'accounts:applications' %}">Cancel</a>
+    </form>
         <div class="circle--primary--avatar">
             {% if user.profile.avatar.url %}
                 <img src="{{ user.profile.avatar.url }}" height="200">

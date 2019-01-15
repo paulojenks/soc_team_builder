@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -24,6 +24,10 @@ from . import choices
 class SignInView(LoginView):
     """Sign in"""
     template_name = 'accounts/signin.html'
+
+
+class ChangePassword(PasswordChangeView):
+    pass
 
 
 class RegisterView(CreateView):
@@ -118,7 +122,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         user = self.get_object()
-        profile_formset = self.form_class(request.POST, instance=user)
+        profile_formset = self.form_class(request.POST, request.FILES, instance=user)
         project_formset = self.second_form_class(request.POST, instance=user)
         skill_formset = self.third_form_class(request.POST, instance=user)
 
@@ -278,7 +282,7 @@ class ApplicationView(LoginRequiredMixin, ListView):
         for skill in choices.SKILLS:
             skills.append(skill[0])
         context = super().get_context_data(**kwargs)
-        context['applications'] = models.Application.objects.all()
+        context['applications'] = models.Application.objects.filter(position__project__user=self.request.user)
         context['projects'] = models.Project.objects.all()
         context['profiles'] = models.Profile.objects.all()
         context['skills'] = skills

@@ -1,6 +1,6 @@
 from django.contrib import messages
-from django.contrib.auth.views import LoginView, PasswordChangeView
-from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError, transaction
@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.urls import reverse
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, ListView, DeleteView
 from django.views.generic.edit import UpdateView, CreateView
 from django.core.mail import send_mail
@@ -24,10 +24,6 @@ from . import choices
 class SignInView(LoginView):
     """Sign in"""
     template_name = 'accounts/signin.html'
-
-
-class ChangePassword(PasswordChangeView):
-    pass
 
 
 class RegisterView(CreateView):
@@ -102,7 +98,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = models.Profile
     second_model = models.Project
     third_model = models.Skill
-    form_class = forms.inlineformset_factory(models.User, models.Profile, form=forms.ProfileForm, extra=1)
+    form_class = inlineformset_factory(models.User, models.Profile, form=forms.ProfileForm, extra=1)
     second_form_class = inlineformset_factory(models.User, models.Project, form=forms.ProjectForm, extra=1)
     third_form_class = inlineformset_factory(models.User, models.Skill, form=forms.SkillsForm, extra=3)
 
@@ -156,41 +152,43 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     """Create project with positions"""
-    template_name = 'accounts/new_project.html'
-    form_class = inlineformset_factory(models.User, models.Project, form=forms.ProjectForm, extra=1)
-    second_form_class = inlineformset_factory(models.Project, models.Position, form=forms.PositionForm, extra=1)
+    template_name = 'accounts/project_new.html'
+    form_class = forms.ProjectForm
+    second_form_class = inlineformset_factory(models.Project, models.Position, form=forms.PositionForm, extra=3)
     model = models.Project
     success_url = reverse_lazy('accounts:Profile')
 
     def get_context_data(self, **kwargs):
         context = super(ProjectCreateView, self).get_context_data(**kwargs)
-        context['project_formset'] = self.form_class(prefix='project')
+        context['project_form'] = self.form_class()
         context['position_form'] = self.second_form_class(prefix='position')
         return context
 
     def post(self, request, *args, **kwargs):
         user = self.request.user
-        project_formset = self.form_class(request.POST, instance=user, prefix='project')
+        project_form = self.form_class(request.POST)
         position_form = self.second_form_class(request.POST, prefix='position')
 
-        if project_formset.is_valid() and position_form.is_valid():
-            project_formset.save()
+        if project_form.is_valid() and position_form.is_valid():
+            project = project_form.save(commit=False)
+            project.user = user
+            project.save()
 
             for position in position_form:
                 if position.cleaned_data.get('name'):
                     models.Position.objects.create(
-                        project = models.Project.objects.get(id=self.kwargs['pk']),
-                        name = position.cleaned_data.get('name'),
-                        descript = position.cleaned_data.get('descript'),
+                        project=project,
+                        name=position.cleaned_data.get('name'),
+                        descript=position.cleaned_data.get('descript'),
                         skill=position.cleaned_data.get('skill'),
                         status='open'
                     )
 
             return HttpResponseRedirect(reverse('accounts:profile'))
         else:
-            project_formset = self.form_class(prefix='project')
+            project_form = self.form_class()
             position_form = self.second_form_class(prefix='position')
-        return render(request, 'accounts/new_project.html', {'project_formset': project_formset,
+        return render(request, 'accounts/project_new.html', {'project_form': project_form,
                                                              'position_form': position_form})
 
 

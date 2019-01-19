@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
+
 from . import views
 
 app_name='accounts'
@@ -17,7 +18,6 @@ urlpatterns = [
     url(r'project/(?P<pk>\d+)/edit/$', views.ProjectUpdateView.as_view(), name='project_edit'),
     url(r'project/(?P<pk>\d+)/$', views.ProjectView.as_view(), name='project'),
     url(r'project/(?P<pk>\d+)/delete/$', views.ProjectDeleteView.as_view(), name='project_delete'),
-    # url(r'profile/change_password', views.change_password, name='change_password'),
     url(r'applications/(?P<pk>\d+)/$', views.ApplicationUpdateView.as_view(), name='application_detail'),
     url(r'applications/(?P<pk>\d+)/delete/$', views.delete_application, name='application_delete'),
     url(r'applications/$', views.ApplicationView.as_view(), name='applications'),

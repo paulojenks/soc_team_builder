@@ -2,11 +2,23 @@
 
   {% block content %}
 <div class="bounds circle--page circle--article">
+{% csrf_token %}
     <div class="grid-70">
     <form action="" method="POST">
+        <h2>New Project</h2>
         {{ project_formset }}
-        {{ position_form }}
-        {% csrf_token %}
+        <h2>Add Positions</h2>
+            <ul class="circle--group--list circle--clone--list">
+            {{ position_form.management_form }}
+                {% for position in position_form %}
+                    {{ position.id }}
+                    {{ position.name }}
+                    {{ position.descript }}
+                    {{ position.skill }}
+                    <a class="circle--clone--add">Add Position</a>
+                    <a class="circle--clone--remove">Remove</a>
+                {% endfor %}
+        </ul>
         <button class="button button-primary" type="submit">Submit</button>>
         <a class="button button-cancel" href="{% url "accounts:index" %}">Cancel</a>
     </form>
